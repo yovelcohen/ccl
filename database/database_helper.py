@@ -1,12 +1,13 @@
-def student_helper(student) -> dict:
+def user_helper(user) -> dict:
     return {
-        "id": str(student['_id']),
-        "fullname": student['fullname'],
-        "email": student['email'],
-        "course_of_study": student['course_of_study'],
-        "year": student['year'],
-        "GPA": student['gpa']
+        "id": str(user['_id']),
+        "fullname": user['fullname'],
+        "email": user['email'],
+        "course_of_study": user['course_of_study'],
+        "year": user['year'],
+        "GPA": user['gpa']
     }
+
 
 def admin_helper(admin) -> dict:
     return {
