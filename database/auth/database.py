@@ -1,17 +1,7 @@
-import motor.motor_asyncio
 from bson import ObjectId
-from decouple import config
 
 from .database_helper import user_helper, admin_helper
-
-MONGO_DETAILS = config('MONGO_DETAILS')
-
-client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
-
-database = client.students
-
-user_collection = database.get_collection('users_collection')
-admin_collection = database.get_collection('admins')
+from .collections import admin_collection, user_collection
 
 
 async def add_admin(admin_data: dict) -> dict:
@@ -27,7 +17,7 @@ async def retrieve_users():
     return students
 
 
-async def add_student(student_data: dict) -> dict:
+async def add_user(student_data: dict) -> dict:
     student = await user_collection.insert_one(student_data)
     new_student = await user_collection.find_one({"_id": student.inserted_id})
     return user_helper(new_student)
@@ -46,7 +36,7 @@ async def delete_user(id: str):
         return True
 
 
-async def update_student_data(id: str, data: dict):
+async def update_user_data(id: str, data: dict):
     student = await user_collection.find_one({"_id": ObjectId(id)})
     if student:
         user_collection.update_one({"_id": ObjectId(id)}, {"$set": data})
