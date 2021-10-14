@@ -10,6 +10,7 @@ def token_response(token: str):
         "access_token": token
     }
 
+
 JWT_SECRET = config('secret')
 
 
