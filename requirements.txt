@@ -1,3 +1,5 @@
+requests
+fastapi-cache2[memcache]
 motor
 PyJWT
 bcrypt
