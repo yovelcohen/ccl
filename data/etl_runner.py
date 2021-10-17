@@ -1,4 +1,4 @@
-from Data.Registry import load_cls
+from data.Registry import load_cls
 
 
 class ETLRunner:

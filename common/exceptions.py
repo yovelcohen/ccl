@@ -1,0 +1,2 @@
+class APICallError(ConnectionError):
+    pass
