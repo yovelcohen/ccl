@@ -1,16 +1,32 @@
-from fastapi import APIRouter, Request
+from functools import wraps
 
+from fastapi import APIRouter
+
+from api_utils.handlers.base import BaseAPIHandler
 from api_utils.handlers.location import LocationsHandler
 from database.cybele.collections import locations
 
 router = APIRouter()
 
 
-@router.post("/location")
-def create(request: Request):
-    handler = LocationsHandler(request=request)
+def _handle_method(method):
+    if method.lower() == 'get':
+        return router.get
 
 
-def search(request: Request, q):
-    search_results = yield locations.command({"find": "locations",
-                                             "filter": {"$text": {"$search": "dogs"}}})
+def register_endpoint(self, f, name, method='get'):
+    method = _handle_method(method)
+
+    @self.router(f'{self.tag}/{name}')
+    def endpoint(*args, **kwargs):
+        return f(*args, **kwargs)
+
+    return endpoint()
+
+
+class LocationsAPI(BaseAPIHandler):
+    tag = '/location'
+    router = router
+
+    def search(self, *args, **kwargs):
+        pass
