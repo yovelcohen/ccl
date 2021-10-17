@@ -1,11 +1,44 @@
-import motor.motor_asyncio
-from decouple import config
+import os
+from urllib.parse import quote_plus
 
-MONGO_DETAILS = config('MONGO_DETAILS')
+from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import MongoClient
 
-client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
 
-database = client.users
+class MongoConnection:
+    def __init__(self, db, as_async):
+        self.db = db
+        self.as_async = as_async
+        self._password = None
 
-user_collection = database.get_collection('users')
-admin_collection = database.get_collection('admins')
+    @property
+    def password(self):
+        password = os.environ['MONGO']
+        self._password = quote_plus(password)
+        return self._password
+
+    def _get_db(self):
+        """
+        connects to the cluster and retrieves a cn a/sync client as specified in class initialization
+        """
+        username = quote_plus(os.environ['MONGO'])
+        url = f"mongodb+srv://{username}:{self.password}@beasentiment.iljs4.mongodb.net/{self.db}?retryWrites=true&w=majority"
+        db = MongoClient(url)[self.db] if self.as_async is False else AsyncIOMotorClient(url)[self.db]
+        return db
+
+    def connect_to_db(self):
+        return self._get_db()
+
+
+def create_mongo_client(db, as_async):
+    """
+    returns a Mongo DB
+    """
+    connection = MongoConnection(db, as_async)
+    return connection.connect_to_db()
+
+
+client = create_mongo_client('users', as_async=True)
+
+user_collection = client.get_collection('users')
+admin_collection = client.get_collection('admins')

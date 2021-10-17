@@ -1,3 +1,4 @@
+import os
 import time
 from typing import Dict
 
@@ -11,7 +12,7 @@ def token_response(token: str):
     }
 
 
-JWT_SECRET = config('secret')
+JWT_SECRET = os.environ.get('secret', '1')
 
 
 def signJWT(user_id: str) -> Dict[str, str]:
