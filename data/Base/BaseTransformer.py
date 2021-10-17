@@ -1,5 +1,5 @@
 import pandas as pd
-from Data.Base.BaseDataClass import BaseDataProcess
+from data.Base.BaseDataClass import BaseDataProcess
 
 
 class BaseTransformer(BaseDataProcess):

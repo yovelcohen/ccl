@@ -1,4 +1,4 @@
-from Data.Base.BaseDataClass import BaseDataProcess
+from data.Base.BaseDataClass import BaseDataProcess
 
 
 class BaseLoader(BaseDataProcess):
