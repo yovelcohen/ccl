@@ -1,4 +1,4 @@
-from data.Base.BaseExtractor import BaseAPIExtractor
+from data.base.base_extractor import BaseAPIExtractor
 from data.registry import extractor
 from common.data_providers import APIsURLs, Providers
 

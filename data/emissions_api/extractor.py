@@ -1,4 +1,4 @@
-from data.Base.BaseExtractor import BaseAPIExtractor
+from data.base.base_extractor import BaseAPIExtractor
 from common.exceptions import APICallError
 from data.registry import extractor
 

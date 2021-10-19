@@ -2,7 +2,7 @@ from typing import Optional
 
 import requests
 
-from data.Base.BaseDataClass import BaseDataProcess
+from data.base.base_data_class import BaseDataProcess
 
 
 class BaseExtractor(BaseDataProcess):

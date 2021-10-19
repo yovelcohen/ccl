@@ -14,7 +14,7 @@ def _register(flow, cls):
         raise KeyError(f'{flow} class must implement the flow name parameter')
     registry = globals()[flow]
     registry[cls.flow] = cls
-    flows__registry[cls.flow] = _timer()
+    flows__registry[cls.flow] = _timer()  # TODO: JOBS TIMER CONFIGURATION, NEEDS SETTINGS UP
     return cls
 
 
