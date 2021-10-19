@@ -1,7 +1,7 @@
 from bson import ObjectId
 
 from .database_helper import user_helper, admin_helper
-from .collections import admin_collection, user_collectionw
+from .collections import admin_collection, user_collection
 
 
 async def add_admin(admin_data: dict) -> dict:

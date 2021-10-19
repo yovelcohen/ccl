@@ -21,8 +21,12 @@ class MongoConnection:
         """
         connects to the cluster and retrieves a cn a/sync client as specified in class initialization
         """
-        username = quote_plus(os.environ['MONGO'])
-        url = f"mongodb+srv://{username}:{self.password}@beasentiment.iljs4.mongodb.net/{self.db}?retryWrites=true&w=majority"
+        if os.environ.get('LOCAL', False):
+            url = f"mongodb://mongodb0.example.com:27017"
+        else:
+            username = quote_plus(os.environ['MONGO'])
+            url = ''
+
         db = MongoClient(url)[self.db] if self.as_async is False else AsyncIOMotorClient(url)[self.db]
         return db
 
