@@ -1,35 +1,25 @@
-from uuid import uuid4
-
-from neomodel import (StructuredNode, Relationship, StringProperty,
-                      DateTimeProperty, RelationshipTo, StructuredRel, UniqueIdProperty,
-                      )
-from neomodel.contrib.spatial_properties import NeomodelPoint
+from neomodel import StructuredRel, StringProperty, DateTimeProperty
 
 
-class DefaultMixin:
-    id = UniqueIdProperty()
+class MetaRelationshipMixin:
     date_added = DateTimeProperty()
+    added = StringProperty(default='model')
+    adding_person_id = StringProperty()
+
+    def save(self):
+        if self.added != 'model':
+            if not self.adding_person_id:
+                raise KeyError("if added by a user than they're id must be provided")
+        super(MetaRelationshipMixin, self).save()
 
 
-class CompanyIndustries(StructuredRel, DefaultMixin):
+class CompanyIndustries(StructuredRel, MetaRelationshipMixin):
     pass
 
 
-class CompanyLocations(StructuredRel, DefaultMixin):
+class CompanyLocations(StructuredRel, MetaRelationshipMixin):
     type = StringProperty()
 
 
-class Industry(StructuredNode, DefaultMixin):
-    StringProperty(unique_index=True, default=uuid4)
-    name = StringProperty(required=True)
-
-
-class Location(StructuredNode, DefaultMixin):
-    type = StringProperty()
-    latitude = NeomodelPoint(**dict(crs='wgs84'))
-
-
-class Company(StructuredNode, DefaultMixin):
-    name = StringProperty(required=True)
-    industries = RelationshipTo('Industry', "COMPANY_INDUSTRIES", model=CompanyIndustries)
-    locations = Relationship('Location', "COMPANY_LOCATIONS", model=CompanyLocations)
+class CompanyPieces(StructuredRel, MetaRelationshipMixin):
+    pass
