@@ -1,10 +1,25 @@
 from fastapi import APIRouter, Body
 from fastapi.encoders import jsonable_encoder
+from fastapi.security import HTTPBasicCredentials
 
+from auth.admin import hash_helper
+from auth.jwt_handler import signJWT
 from database.auth.database import *
 from models.user import *
 
 router = APIRouter()
+
+
+@router.get("/login")
+def login(creds: HTTPBasicCredentials = Body(...)):
+    email = creds.username
+    user = await user_collection.find_one({"email": email})
+    if user:
+        password = hash_helper.verify(creds.password, user["password"])
+        if password:
+            return signJWT(email)
+        return "Incorrect email or password"
+    return "Incorrect email or password"
 
 
 @router.get("/", response_description="Users retrieved")
@@ -18,7 +33,7 @@ async def get_users():
 
 @router.get("/{id}", response_description="User data retrieved")
 async def get_user_data(id):
-    user = await retrieve_user(id)
+    user = await retrieve_user(id=id)
     return (ResponseModel(user, "User data retrieved successfully")
             if user
             else ErrorResponseModel("An error occurred.", 404, "User doesn't exist."))
