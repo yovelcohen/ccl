@@ -9,3 +9,5 @@ python-decouple
 fastapi
 pydantic[email]
 passlib
+jieba
+neomodel
