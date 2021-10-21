@@ -23,10 +23,15 @@ async def add_user(student_data: dict) -> dict:
     return user_helper(new_student)
 
 
-async def retrieve_user(id: str) -> dict:
-    student = await user_collection.find_one({"_id": ObjectId(id)})
-    if student:
-        return user_helper(student)
+async def retrieve_user(id: str = None, email=None) -> dict:
+    if not email and not id:
+        raise KeyError("either email or id must be provided")
+    if id:
+        user = await user_collection.find_one({"_id": ObjectId(id)})
+    if email:
+        user = await user_collection.find_one({"email": email})
+    if user:
+        return user_helper(user)
 
 
 async def delete_user(id: str):
